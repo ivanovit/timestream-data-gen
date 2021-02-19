@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    component: timestream-data-gen
+  name: timestream-data-gen
+  namespace: gprodanov-test
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: timestream-data-gen
+        component: timestream-data-gen
+    spec:
+      containers:
+      - image: iiivanov/timestream-data-gen:0.0.1
+        imagePullPolicy: Always
+        name: timestream-data-gen
+        env:
+        - name: VAR_INTERVAL_SECONDS
+          value: "1"
+        - name: VAR_DURATION_MINUTES
+          value: "60"
+        - name: VAR_TABLE_NAME
+          value: stgus3-usage
+        - name: AWS_ACCESS_KEY_ID
+          value: <AWS_ACCESS_KEY_ID>
+        - name: AWS_SECRET_ACCESS_KEY
+          value: <AWS_SECRET_ACCESS_KEY>
+        resources:
+          requests:
+            cpu: 600m
+            memory: 400Mi
+          limits:
+            cpu: 600m
+            memory: 400Mi
+      restartPolicy: Never
